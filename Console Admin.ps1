@@ -4,12 +4,6 @@
 # the base script comes from : https://www.powershellgallery.com/packages/pcdiag/2.0 ()
 # Free to use as you want
 #################################################
-
-Pas de get-crendential
-
-Pas de script d'élévation
-
-( Utiliser le .exe de base )
 #>
 
 #region Constructor
