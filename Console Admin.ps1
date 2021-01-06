@@ -4,6 +4,12 @@
 # the base script comes from : https://www.powershellgallery.com/packages/pcdiag/2.0 ()
 # Free to use as you want
 #################################################
+
+Pas de get-crendential
+
+Pas de script d'élévation
+
+( Utiliser le .exe de base )
 #>
 
 #region Constructor
@@ -60,14 +66,14 @@ $TabControl1.TabIndex = 0
 $TabControl1.Text = ""
 
 
-#~~< AccÃ¨s Rapide >~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~< Accès Rapide >~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 $AccesRapide = New-Object System.Windows.Forms.TabPage
 $AccesRapide.AutoScroll = $true
 $AccesRapide.Location = New-Object System.Drawing.Point(4, 0)
 $AccesRapide.Padding = New-Object System.Windows.Forms.Padding(3)
 $AccesRapide.Size = New-Object System.Drawing.Size(1153, 155)
 $AccesRapide.TabIndex = 0
-$AccesRapide.Text = "AccÃ¨s Rapide"
+$AccesRapide.Text = "Accès Rapide"
 $AccesRapide.UseVisualStyleBackColor = $true
 
 
@@ -121,7 +127,7 @@ $MO_FW.UseVisualStyleBackColor = $true
 $MO_FW.add_Click({MO_FW_Click($MO_FW)})
 
 
-#~~< Panneau des accÃ¨s >~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~< Panneau des accès >~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 $Panel1 = New-Object System.Windows.Forms.Panel
 $Panel1.Location = New-Object System.Drawing.Point(0, 5)
 $Panel1.Size = New-Object System.Drawing.Size(1100, 113)
@@ -253,15 +259,15 @@ $MMC.Image = ([System.Drawing.Image]([System.Drawing.Image]::FromStream((New-Obj
 $MMC.add_Click({MMC_Click($MMC)})
 
 
-#~~< RedÃ©marrage de l'ordinateur >~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~< Redémarrage de l'ordinateur >~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 $RestartComputer = New-Object System.Windows.Forms.Button
 $RestartComputer.Location = New-Object System.Drawing.Point(12, 0)
 $RestartComputer.Size = New-Object System.Drawing.Size(79, 93)
 $RestartComputer.TabIndex = 9
-$RestartComputer.Text = "RedÃ©marrer"
+$RestartComputer.Text = "Redémarrer"
 $RestartComputer.TextAlign = [System.Drawing.ContentAlignment]::BottomCenter
 $RestartComputer.UseVisualStyleBackColor = $true
-# Icone du RÃ©dÃ©marrage du l'ordinateur
+# Icone du Rédémarrage du l'ordinateur
 $RestartComputer.Image = ([System.Drawing.Image]([System.Drawing.Image]::FromStream((New-Object System.IO.MemoryStream(($$ = [System.Convert]::FromBase64String(
 "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlz"+
                                  "AAAOwQAADsEBuJFr7QAACl5JREFUWEe9l3lY1VUax3EJFyRJSFRc2Bcvq4DIriAg+w6iYKgo7kvZ"+
@@ -574,7 +580,7 @@ function MO_ClearARPCache_Click( $object ){
 	$outputbox.AppendText("`n***  processus terminer ***") | Out-String
 }
 
-# VÃ©rificateur des fichiers systÃ¨me
+# Vérificateur des fichiers système
 function MO_StartSFCScan_Click( $object ){
 	powershell -Command "Start-Process 'cmd' -Verb RunAs -ArgumentList '/c sfc /scannow'"
 }
@@ -629,13 +635,13 @@ function MainMenuLoad( $object ){
 }
 
 
-# RedÃ©marrage du poste
+# Redémarrage du poste
 function Restart_Click( $object ){
 $Restart_Computer = New-Object System.Windows.Forms.Form
 $Restart_Computer.FormBorderStyle = [System.Windows.Forms.FormBorderStyle]::FixedDialog
 $Restart_Computer.MaximizeBox = $False
 $Restart_Computer.MinimizeBox = $False  
-$Restart_Computer.Text = "RedÃ©marrer"
+$Restart_Computer.Text = "Redémarrer"
 $Restart_Computer.TopMost = $true
 $Restart_Computer.StartPosition = "CenterScreen" 
 $Restart_Computer.Width = 400
@@ -685,7 +691,7 @@ $RCInfo2.Font = "Lucida Console,10,style=Bold"
 $Restart_Computer.controls.Add($RCInfo2)
 
 $RCLabel2 = New-Object system.windows.Forms.Label
-$RCLabel2.Text = "Ce processus redÃ©marrera l'ordinateur."
+$RCLabel2.Text = "Ce processus redémarrera l'ordinateur."
 $RCLabel2.AutoSize = $true
 $RCLabel2.Width = 25
 $RCLabel2.Height = 10
