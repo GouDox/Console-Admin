@@ -1,6 +1,6 @@
 <#
 #################################################
-# 2020-12-23 - S.I
+# 2021-01-09 - S.I
 # the base script comes from : https://www.powershellgallery.com/packages/pcdiag/2.0 ()
 # Free to use as you want
 #################################################
@@ -27,7 +27,7 @@ $MainMenu.MaximizeBox = $False
 $MainMenu.MinimizeBox = $False
 $MainMenu.Location = New-Object System.Drawing.Point(0, 0)
 $MainMenu.Text = "Console Admin - S.I"
-$MainMenu.Size = New-Object System.Drawing.Size(870, 375)
+$MainMenu.Size = New-Object System.Drawing.Size(900, 375)
 
 #################################################
 # AJOUT DES COMPOSANTS
@@ -65,7 +65,7 @@ $AccesRapide = New-Object System.Windows.Forms.TabPage
 $AccesRapide.AutoScroll = $true
 $AccesRapide.Location = New-Object System.Drawing.Point(4, 0)
 $AccesRapide.Padding = New-Object System.Windows.Forms.Padding(3)
-$AccesRapide.Size = New-Object System.Drawing.Size(1153, 155)
+$AccesRapide.Size = New-Object System.Drawing.Size(5, 10)
 $AccesRapide.TabIndex = 0
 $AccesRapide.Text = "Accès Rapide"
 $AccesRapide.UseVisualStyleBackColor = $true
@@ -124,27 +124,9 @@ $MO_FW.add_Click({MO_FW_Click($MO_FW)})
 #~~< Panneau des accès >~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 $Panel1 = New-Object System.Windows.Forms.Panel
 $Panel1.Location = New-Object System.Drawing.Point(0, 5)
-$Panel1.Size = New-Object System.Drawing.Size(1100, 113)
+$Panel1.Size = New-Object System.Drawing.Size(1100, 150)
 $Panel1.TabIndex = 1
 $Panel1.Text = ""
-
-
-#~~< Architecture variable >~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-$OSVER = if($env:PROCESSOR_ARCHITECTURE -eq "x86"){"32-Bits"}Else{"64-Bits"}
-$Info1 = New-Object System.Windows.Forms.Label
-$Info1.Location = New-Object System.Drawing.Point(700, 70)
-$Info1.Size = New-Object System.Drawing.Size(158, 23)
-$Info1.TabIndex = 13
-$Info1.Text = "Architecture = $OSVER"
-
-
-#~~< Version de Windows >~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-$OS = (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion").ReleaseId
-$Info2 = New-Object System.Windows.Forms.Label
-$Info2.Location = New-Object System.Drawing.Point(700, 50)
-$Info2.Size = New-Object System.Drawing.Size(150, 23)
-$Info2.TabIndex = 12
-$Info2.Text = "Windows version = $OS "
 
 
 #~~< Nom du poste >~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -157,6 +139,42 @@ $ComputerNameBox.TabIndex = 1
 $ComputerNameBox.Text = "$Computername"
 $ComputerNameBox.UseVisualStyleBackColor = $false
 $ComputerNameBox.BackColor = [System.Drawing.SystemColors]::Info
+
+
+#~~< Version de Windows >~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+$OS = (Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion").ReleaseId
+$Info2 = New-Object System.Windows.Forms.Label
+$Info2.Location = New-Object System.Drawing.Point(695, 45)
+$Info2.Size = New-Object System.Drawing.Size(150, 12)
+$Info2.TabIndex = 12
+$Info2.Text = "Windows version = $OS"
+
+
+#~~< Architecture variable >~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+$OSVER = if($env:PROCESSOR_ARCHITECTURE -eq "x86"){"32-Bits"}Else{"64-Bits"}
+$Info1 = New-Object System.Windows.Forms.Label
+$Info1.Location = New-Object System.Drawing.Point(695, 60)
+$Info1.Size = New-Object System.Drawing.Size(158, 12)
+$Info1.TabIndex = 13
+$Info1.Text = "Architecture = $OSVER"
+
+
+#~~< Espace Disque C: >~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+$Disk_C = Get-CimInstance -Class Win32_logicaldisk | Where-Object caption -eq "C:" | foreach-object {Write-Output " $($_.caption) $('{0:N2}' -f ($_.Size/1gb)) GB total, $('{0:N2}' -f ($_.FreeSpace/1gb)) GB free "}
+$Info3 = New-Object System.Windows.Forms.Label
+$Info3.Location = New-Object System.Drawing.Point(692, 85)
+$Info3.Size = New-Object System.Drawing.Size(200, 12)
+$Info3.TabIndex = 12
+$Info3.Text = "$Disk_C"
+
+
+#~~< Espace Disque X: >~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+$Disk_X = Get-CimInstance -Class Win32_logicaldisk | Where-Object caption -eq "X:" | foreach-object {Write-Output " $($_.caption) $('{0:N2}' -f ($_.Size/1gb)) GB total, $('{0:N2}' -f ($_.FreeSpace/1gb)) GB free "}
+$Info4 = New-Object System.Windows.Forms.Label
+$Info4.Location = New-Object System.Drawing.Point(692, 100)
+$Info4.Size = New-Object System.Drawing.Size(200, 12)
+$Info4.TabIndex = 12
+$Info4.Text = "$Disk_X"
 
 
 #################################################
@@ -492,6 +510,8 @@ $GPUpdate.add_Click({GPUpdate_Click($GPUpdate)})
 # Ajout des composants  
 $Panel1.Controls.Add($Info1)
 $Panel1.Controls.Add($Info2)
+$Panel1.Controls.Add($Info3)
+$Panel1.Controls.Add($Info4)
 $Panel1.Controls.Add($ComputerMGMT)
 $Panel1.Controls.Add($MMC)
 $Panel1.Controls.Add($RestartComputer)
@@ -604,24 +624,34 @@ function MMC_Click( $object ){
 	Start-Process MMC
 }
 
+# Invite De Commande
 function CMD_Click( $object ){
 	Start-Process cmd
 }
 
+# Panneau De Configuration
 function ControlPanel_Click( $object ){
 	Start-Process Control
 }
 
+# Explorateur De Fichier
 function FileExplorer_Click( $object ){
 	Start-Process explorer
 }
 
+# Windows Powershell
 function PS_Click( $object ){
 	Start-Process powershell
 }
 
+# Mise à Jour Stratégie De Groupe Locaux et Active Directory
 function GPUpdate_Click( $object ){
 	Start-Process gpupdate
+}
+
+# Redémarrage du poste
+function Restart_Click( $object ){
+  Restart-Computer -Force
 }
 
 function MainMenuLoad( $object ){
